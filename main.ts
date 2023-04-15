@@ -17,7 +17,7 @@ async function handler(req: Request): Promise<Response> {
   }
   // Get the request body and extract the code
   const requestBody = await req.json();
-  if (!requestBody || !(requestBody.code && !requestBody.refresh_token)) {
+  if (!requestBody || !(requestBody.code || requestBody.refresh_token)) {
     return new Response("no code", { status: 200, headers });
   }
 
