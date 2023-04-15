@@ -12,12 +12,12 @@ const headers = new Headers({
 
 async function handler(req: Request): Promise<Response> {
   if (req.method === 'OPTIONS' || !req.bodyUsed) {
-    return new Response("", { status: 200, headers });
+    return new Response("ok", { status: 200, headers });
   }
   // Get the request body and extract the code
   const requestBody = await req.json();
   if (!requestBody || !requestBody.code) {
-    return new Response("{}", { status: 200, headers });
+    return new Response("ok", { status: 200, headers });
   }
 
   // Construct headers for the Github request
