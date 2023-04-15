@@ -17,7 +17,7 @@ async function handler(req: Request): Promise<Response> {
   }
   // Get the request body and extract the code
   const requestBody = await req.json();
-  if (!requestBody || !requestBody.code) {
+  if (!requestBody || !(requestBody.code && !requestBody.refresh_token)) {
     return new Response("no code", { status: 200, headers });
   }
 
@@ -25,7 +25,12 @@ async function handler(req: Request): Promise<Response> {
   const body = new URLSearchParams();
   body.set('client_id', CLIENT_ID);
   body.set('client_secret', CLIENT_SECRET);
-  body.set('code', requestBody.code);
+  if (requestBody.code) {
+    body.set('code', requestBody.code);
+  } else {
+    body.set('grant_type', 'refresh_token');
+    body.set('refresh_token', requestBody.refresh_token);
+  }
 
   // Make the request to fetch an access token
   return await fetch("https://github.com/login/oauth/access_token", {
