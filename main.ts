@@ -6,12 +6,13 @@ const CLIENT_SECRET = Deno.env.get("CLIENT_SECRET");
 const headers = new Headers({
   accept: "application/json",
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Credentials": "true"
+  "Access-Control-Allow-Credentials": "true",
+  "Access-Control-Allow-Methods": "*"
 });
 
 async function handler(req: Request): Promise<Response> {
-  if (req.method === 'OPTIONS' || !req.body) {
-    return new Response("{}", { status: 200, headers });
+  if (req.method === 'OPTIONS' || !req.bodyUsed) {
+    return new Response("", { status: 200, headers });
   }
   // Get the request body and extract the code
   const requestBody = await req.json();
