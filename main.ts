@@ -3,16 +3,20 @@ import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
 const CLIENT_ID = Deno.env.get("CLIENT_ID");
 const CLIENT_SECRET = Deno.env.get("CLIENT_SECRET");
 
-const CORS_HEADERS: [string, string][] = [
-  ["Access-Control-Allow-Origin", "*"],
-  ["Access-Control-Allow-Credentials", "true"]
-];
+const headers = new Headers({
+  accept: "application/json",
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Credentials": "true"
+});
 
 async function handler(req: Request): Promise<Response> {
+  if (req.method === 'OPTIONS' || !req.body) {
+    return new Response("{}", { status: 200, headers });
+  }
   // Get the request body and extract the code
   const requestBody = await req.json();
   if (!requestBody || !requestBody.code) {
-    return new Response("", { status: 200, headers: CORS_HEADERS });
+    return new Response("{}", { status: 200, headers });
   }
 
   // Construct headers for the Github request
@@ -37,9 +41,9 @@ async function handler(req: Request): Promise<Response> {
     }
     return body;
   }).then(async body => {
-    return new Response(JSON.stringify(body), { headers: CORS_HEADERS });
+    return new Response(JSON.stringify(body), { headers });
   }).catch((error: Error) => {
-    return new Response(JSON.stringify({ error: error.message }), { status: 401, headers: CORS_HEADERS });
+    return new Response(JSON.stringify({ error: error.message }), { status: 401, headers });
   });
 }
 
