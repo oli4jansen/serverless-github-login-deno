@@ -10,16 +10,16 @@ const CORS_HEADERS: [string, string][] = [
 
 async function handler(req: Request): Promise<Response> {
   // Get the request body and extract the code
-  const code = (await req.json()).code;
-  if (!code) {
-    return new Response(JSON.stringify({ error: 'no_code' }), { status: 401, headers: CORS_HEADERS });
+  const requestBody = await req.json();
+  if (!requestBody || !requestBody.code) {
+    return new Response("", { status: 200, headers: CORS_HEADERS });
   }
 
   // Construct headers for the Github request
   const body = new URLSearchParams();
   body.set('client_id', CLIENT_ID);
   body.set('client_secret', CLIENT_SECRET);
-  body.set('code', code);
+  body.set('code', requestBody.code);
 
   // Make the request to fetch an access token
   return await fetch("https://github.com/login/oauth/access_token", {
