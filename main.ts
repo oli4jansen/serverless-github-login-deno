@@ -12,7 +12,7 @@ const headers = new Headers({
 });
 
 async function handler(req: Request): Promise<Response> {
-  if (req.method === 'OPTIONS' || !req.bodyUsed) {
+  if (req.method === 'OPTIONS' || !req.body) {
     return new Response("no body", { status: 200, headers });
   }
   // Get the request body and extract the code
