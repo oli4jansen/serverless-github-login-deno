@@ -7,7 +7,8 @@ const headers = new Headers({
   accept: "application/json",
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Credentials": "true",
-  "Access-Control-Allow-Methods": "*"
+  "Access-Control-Allow-Methods": "*",
+  "Access-Control-Allow-Headers": "*"
 });
 
 async function handler(req: Request): Promise<Response> {
